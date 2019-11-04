@@ -3,10 +3,11 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
+from core.common.service import ModelServiceMixin
 from core.user.managers import UserManager
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, ModelServiceMixin):
     email = models.EmailField(_('email address'), unique=True)
     system_email = models.EmailField(_('dwell system email address'),
                                      unique=True, null=True)
@@ -56,4 +57,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
     def __str__(self):
-        return '%s | %s' % (self.email, self.get_full_name())
+        return self.get_full_name()
