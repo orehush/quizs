@@ -21,7 +21,9 @@ class Team(models.Model, ModelServiceMixin):
     service_class = TeamService
 
     def __str__(self):
-        return f'{self.course}\'s team'
+        if hasattr(self, 'course'):
+            return f'{self.course}\'s team'
+        return 'Unknown team'
 
 
 class TeamMember(models.Model, ModelServiceMixin):
@@ -33,9 +35,11 @@ class TeamMember(models.Model, ModelServiceMixin):
     teacher = models.ForeignKey(
         Teacher,
         on_delete=models.CASCADE,
-        related_name='teams'
+        related_name='team_members'
     )
-    role = models.PositiveSmallIntegerField(choices=())  # TODO add choices
+    role = models.PositiveSmallIntegerField(
+        choices=()  # TODO add choices
+    )
 
     objects = TeamMemberManager()
     service_class = TeamMemberService
@@ -52,6 +56,9 @@ class Course(TimeStampedModel, ModelServiceMixin):
         Team,
         on_delete=models.CASCADE,
         related_name='course'
+    )
+    status = models.PositiveSmallIntegerField(
+        choices=()  # TODO add choices
     )
 
     objects = CourseManager()
